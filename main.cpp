@@ -61,7 +61,7 @@ int main() {
          }
       }
 
-      //hello
+
       cout << "Voulez-vous recommencer [O/N]? ";
       cin >> recommencer;
       cin.clear();
