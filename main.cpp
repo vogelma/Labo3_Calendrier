@@ -5,7 +5,7 @@ Date creation  : 27.10.2020
 Description    : Ce programme va demander une année à l'utilisateur puis va afficher le calendrier de cette
                  année. A la fin le programme demande si l'utilisateur veut recommencer. Les erreurs de
                  saisie sont traitées.
-Remarque(s)    : Le switch n'as pas de default car toute les valeurs ont une résultat différent.
+Remarque(s)    : Le switch n'as pas de default car toutes les valeurs ont un résultat différent.
 Compilateur    : Mingw-w64 g++ 8.1.0
 -----------------------------------------------------------------------------------*/
 #include <cstdlib>
@@ -19,102 +19,116 @@ using namespace std;
 int main() {
 
    enum Mois {
-      JANVIER = 1, FEVRIER, MARS, AVRIL, MAI, JUIN, JUILLET, AOUT, SEPTEMBRE, OCTOBRE, NOVEMBRE, DECEMBRE
+      JANVIER = 1,
+      FEVRIER    ,
+      MARS       ,
+      AVRIL      ,
+      MAI        ,
+      JUIN       ,
+      JUILLET    ,
+      AOUT       ,
+      SEPTEMBRE  ,
+      OCTOBRE    ,
+      NOVEMBRE   ,
+      DECEMBRE
    };
 
-   const int ANNEEMIN = 1900;
-   const int ANNEEMAX = 2100;
-   const int W = 3;
-   const char oui = 'O';
-   const char non = 'N';
+   const int   ANNEEMIN = 1900;
+   const int   ANNEEMAX = 2100;
+   const int   W        =    3;
+   const char  OUI      =  'O';
+   const char  NON      =  'N';
 
    bool fluxErreur;
    int  anneeUtilisateur;
    char recommencer;
 
 
-   //boucle de saisie utilisateur recommencer
+   // do de la boucle recommencer?
    do {
 
-      //boucle de saisie utilisateur d'année
+      // do de la boucle année? gère erreurs de saisie
       do {
 
-         fluxErreur = false;
+         fluxErreur = false; // faux par défaut, flux intact
 
-         ////AFFICHAGE SAISIE ANNEE/////
-         cout << "Entrez une valeur [" << ANNEEMIN << "-" << ANNEEMAX << "]:";
-         cin >> anneeUtilisateur;
+         cout << "Entrez une valeur [" << ANNEEMIN << "-" << ANNEEMAX << "] : "; // intervalle d'années proposé
+         cin  >>  anneeUtilisateur;
 
-         //vérifie les erreurs du flux et les années limites
+         // vérifie si la saisie de l'utilisateur n'a pas cassé le flux ou n'a pas respecté l'intervalle d'années
          if (!cin.good() or anneeUtilisateur < ANNEEMIN or anneeUtilisateur > ANNEEMAX)
          {
-            fluxErreur = true;
+            fluxErreur = true; // passe la variable à vrai
             cout << "/!\\ recommencez" << endl;
-            cin.clear();
+            cin.clear(); // vide le cache d'erreur
          }
 
          EMPTY_BUFFER
 
-      } while (fluxErreur);
+      } while (fluxErreur); // tant que fluxErreur == vrai (=> saisie invalide)
 
-      //saut de ligne avec janvier
+
+      // saut de ligne avant affichage du calendrier
       cout << endl;
 
-      //formule de wikipédia pour trouver le jour de la semaine d'une date
-      //https://fr.wikibooks.org/wiki/Curiosit%C3%A9s_math%C3%A9matiques/Trouver_le_jour_de_la_semaine_avec_une_date_donn%C3%A9e
-      int jourSemaine = (23/9 + 4+(anneeUtilisateur+1) + (anneeUtilisateur-1)/4 - (anneeUtilisateur-1)/100
-                        + (anneeUtilisateur-1)/400)%7;
+      /* formule de Keith simplifiée pour trouver le jour de la semaine du premier janvier de n'importe quelle année
+         [https://fr.wikibooks.org/wiki/Curiosit%C3%A9s_math%C3%A9matiques/
+          Trouver_le_jour_de_la_semaine_avec_une_date_donn%C3%A9e]
+      */
+      int jourSemaine = (23/9 + 4 + (anneeUtilisateur+1) + (anneeUtilisateur-1)/4 - (anneeUtilisateur-1)/100
+                        + (anneeUtilisateur-1)/400) % 7;
       int nbreJours;
 
-      //Affichage mois
+      // Affichage mois, de janvier à décembre avec 0++ <= 12 (se mettre d'accord sur l'écriture ici)
       for (int moisCourant = JANVIER; moisCourant <= DECEMBRE; ++moisCourant)
       {
+         // Affiche mois courant grâce à un switch 1 - 12
          switch (moisCourant) {
+
             case JANVIER  :
-               cout << "JANVIER ";
-               break;
+               cout << "JANVIER "  ; break;
+
             case FEVRIER  :
-               cout << "FEVRIER ";
-               break;
+               cout << "FEVRIER "  ; break;
+
             case MARS  :
-               cout << "MARS ";
-               break;
+               cout << "MARS "     ; break;
+
             case AVRIL  :
-               cout << "AVRIL ";
-               break;
+               cout << "AVRIL "    ; break;
+
             case MAI  :
-               cout << "MAI ";
-               break;
+               cout << "MAI "      ; break;
+
             case JUIN  :
-               cout << "JUIN ";
-               break;
+               cout << "JUIN "     ; break;
+
             case JUILLET  :
-               cout << "JUILLET ";
-               break;
+               cout << "JUILLET "  ; break;
+
             case AOUT  :
-               cout << "AOUT ";
-               break;
+               cout << "AOUT "     ; break;
+
             case SEPTEMBRE  :
-               cout << "SEPTEMBRE ";
-               break;
+               cout << "SEPTEMBRE "; break;
+
             case OCTOBRE :
-               cout << "OCTOBRE ";
-               break;
+               cout << "OCTOBRE "  ; break;
+
             case NOVEMBRE :
-               cout << "NOVEMBRE ";
-               break;
+               cout << "NOVEMBRE " ; break;
+
             case DECEMBRE :
-               cout << "DECEMBRE ";
-               break;
+               cout << "DECEMBRE " ; break;
          }
 
-         cout << anneeUtilisateur << endl;
+         cout << anneeUtilisateur        << endl;
          cout << "  L  M  M  J  V  S  D" << endl;
 
-         //test pour connaître le nombre de jour du mois courant
+         // Test pour connaître le nombre de jour du mois courant
          if (moisCourant == FEVRIER)
          {
-            //année bissextile
+            // Cas année bissextile
             if (anneeUtilisateur % 400 == 0 or anneeUtilisateur % 4 == 0 and anneeUtilisateur % 100 != 0)
             {
                nbreJours = 29;
@@ -134,12 +148,13 @@ int main() {
             nbreJours = 31;
          }
 
-         //affichage jours
+         // Affichage jours
          for (int jour = 1; jour <= nbreJours; ++jour)
          {
-            //alignement pour le premier de chaque mois
+            // Alignement pour le premier de chaque mois
             if (jour == 1)
             {
+               // Remplit de jours vides jusqu'à jour 1
                cout << setw(W * jourSemaine) << jour;
             }
             else
@@ -147,8 +162,10 @@ int main() {
                cout << setw(W) << jour;
             }
 
-            //saut de ligne si c'est dimanche
-            //seulement si c'est pas le dernier jour du mois
+            /* Si c'est dimanche, recommence la semaine,
+               et saut de ligne seulement si ce n'est pas le dernier jour du mois
+               (évite un triple saut de ligne avec les 2 endl l.184)
+            */
             if (jourSemaine == 7)
             {
                jourSemaine = 1;
@@ -168,15 +185,15 @@ int main() {
       }
 
 
-      //boucle de recommencement
+      // boucle recommencer? gère erreurs de saisie
       do {
 
          fluxErreur = false;
 
-         cout << "Voulez-vous recommencer [O/N]? ";
+         cout << "Voulez-vous recommencer [O/N] ? ";
          cin >> recommencer;
 
-         if (recommencer != non and recommencer != oui or !cin.good())
+         if (recommencer != NON and recommencer != OUI or !cin.good())
          {
             fluxErreur = true;
             cout << "/!\\ recommencez" << endl;
@@ -186,7 +203,7 @@ int main() {
 
       } while(fluxErreur);
 
-   } while (recommencer == oui);
+   } while (recommencer == OUI); // On peut sortir de la boule l.193
 
    return EXIT_SUCCESS;
 }
