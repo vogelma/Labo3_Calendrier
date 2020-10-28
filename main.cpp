@@ -50,15 +50,51 @@ int main() {
 
       } while (fluxErreur);
 
-      for (int moisCourant = 1; moisCourant <= DECEMBRE; ++moisCourant) {
+
+
+
+      for (int moisCourant = JANVIER; moisCourant <= DECEMBRE; ++moisCourant) {
          //test avant chaque boucle de mois
          (moisCourant == FEVRIER ? nbreJours = 28 : moisCourant == AVRIL || moisCourant == JUIN ||
                                                     moisCourant == SEPTEMBRE || moisCourant == NOVEMBRE ? nbreJours = 30
                                                                                                         : nbreJours = 31);
-         for(int nbreJoursAffiche = 0; nbreJoursAffiche <= nbreJours; ++nbreJoursAffiche)
-         {
-            cout << setw(W)  << nbreJoursAffiche;
-         }
+            switch (moisCourant) {
+               case 1  : cout << "JANVIER " << anneeUtilisateur << endl; break;
+               case 2  : cout << "FEVRIER " << anneeUtilisateur << endl; break;
+               case 3  : cout << "MARS " << anneeUtilisateur << endl; break;
+               case 4  : cout << "AVRIL " << anneeUtilisateur << endl; break;
+               case 5  : cout << "MAI " << anneeUtilisateur << endl; break;
+               case 6  : cout << "JUIN " << anneeUtilisateur << endl; break;
+               case 7  : cout << "JUILLET " << anneeUtilisateur << endl; break;
+               case 8  : cout << "AOUT " << anneeUtilisateur << endl; break;
+               case 9  : cout << "SEPTEMBRE " << anneeUtilisateur << endl; break;
+               case 10 : cout << "OCTOBRE " << anneeUtilisateur << endl; break;
+               case 11 : cout << "NOVEMBRE " << anneeUtilisateur << endl; break;
+               case 12 : cout << "DECEMBRE " << anneeUtilisateur << endl; break;
+            }
+
+            cout << "  L  M  M  J  V  S  D" << endl;
+
+            int JourSemaine = 1;
+            for (int Jour = 1; Jour <= nbreJours; ++Jour)
+            {
+               if(Jour == 1) {
+                  cout << setw(3* JourSemaine) << Jour;
+               }
+               else {
+                  cout << setw(3) << Jour;
+               }
+
+               if(JourSemaine == 7 and Jour != nbreJours) // on voit cette ligne en labo
+               {
+                  cout << endl;
+                  JourSemaine = 1;
+               }
+               else{
+                  ++JourSemaine;
+               }
+            }
+            cout << endl << endl;
       }
 
 
