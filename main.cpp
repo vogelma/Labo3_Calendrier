@@ -2,10 +2,10 @@
 Nom du fichier : main.cpp
 Auteur(s)      : Maëlle Vogel et Louis-Salim Ghosn
 Date creation  : 27.10.2020
-Description    : Ce programme va demander une date à l'utilisateur puis va afficher le calendrier de cette
+Description    : Ce programme va demander une année à l'utilisateur puis va afficher le calendrier de cette
                  année. A la fin le programme demande si l'utilisateur veut recommencer. Les erreurs de
                  saisie sont traitées.
-Remarque(s)    : <à compléter>
+Remarque(s)    : Le switch n'as pas de default car toute les valeurs ont une résultat différent.
 Compilateur    : Mingw-w64 g++ 8.1.0
 -----------------------------------------------------------------------------------*/
 #include <cstdlib>
@@ -39,15 +39,16 @@ int main() {
       //boucle de saisie utilisateur d'année
       do {
 
-         fluxErreur = 0;
+         fluxErreur = false;
 
          ////AFFICHAGE SAISIE ANNEE/////
          cout << "Entrez une valeur [" << ANNEEMIN << "-" << ANNEEMAX << "]:";
          cin >> anneeUtilisateur;
 
          //vérifie les erreurs du flux et les années limites
-         if (!cin.good() or anneeUtilisateur < ANNEEMIN or anneeUtilisateur > ANNEEMAX) {
-            fluxErreur = 1;
+         if (!cin.good() or anneeUtilisateur < ANNEEMIN or anneeUtilisateur > ANNEEMAX)
+         {
+            fluxErreur = true;
             cout << "/!\\ recommencez" << endl;
             cin.clear();
          }
@@ -59,35 +60,15 @@ int main() {
       //saut de ligne avec janvier
       cout << endl;
 
-      //le 1er janvier est un lundi
-      int jourSemaine = 1;
+      //formule de wikipédia pour trouver le jour de la semaine d'une date
+      //https://fr.wikibooks.org/wiki/Curiosit%C3%A9s_math%C3%A9matiques/Trouver_le_jour_de_la_semaine_avec_une_date_donn%C3%A9e
+      int jourSemaine = (23/9 + 4+(anneeUtilisateur+1) + (anneeUtilisateur-1)/4 - (anneeUtilisateur-1)/100
+                        + (anneeUtilisateur-1)/400)%7;
       int nbreJours;
 
       //Affichage mois
       for (int moisCourant = JANVIER; moisCourant <= DECEMBRE; ++moisCourant)
       {
-         //test pour connaître le nombre de jour
-         if (moisCourant == FEVRIER)
-         {
-            //année bissextile
-            if (anneeUtilisateur % 400 == 0 or anneeUtilisateur % 4 == 0 and anneeUtilisateur % 100 != 0)
-            {
-               nbreJours = 29;
-            }
-            else
-               {
-               nbreJours = 28;
-            }
-
-         }
-         else if (moisCourant == AVRIL || moisCourant == JUIN || moisCourant == SEPTEMBRE || moisCourant == NOVEMBRE)
-         {
-            nbreJours = 30;
-         }
-         else {
-            nbreJours = 31;
-         }
-
          switch (moisCourant) {
             case JANVIER  :
                cout << "JANVIER ";
@@ -130,26 +111,55 @@ int main() {
          cout << anneeUtilisateur << endl;
          cout << "  L  M  M  J  V  S  D" << endl;
 
+         //test pour connaître le nombre de jour du mois courant
+         if (moisCourant == FEVRIER)
+         {
+            //année bissextile
+            if (anneeUtilisateur % 400 == 0 or anneeUtilisateur % 4 == 0 and anneeUtilisateur % 100 != 0)
+            {
+               nbreJours = 29;
+            }
+            else
+            {
+               nbreJours = 28;
+            }
+
+         }
+         else if (moisCourant == AVRIL || moisCourant == JUIN || moisCourant == SEPTEMBRE || moisCourant == NOVEMBRE)
+         {
+            nbreJours = 30;
+         }
+         else
+         {
+            nbreJours = 31;
+         }
+
          //affichage jours
-         for (int jour = 1; jour <= nbreJours; ++jour) {
+         for (int jour = 1; jour <= nbreJours; ++jour)
+         {
             //alignement pour le premier de chaque mois
-            if (jour == 1) {
+            if (jour == 1)
+            {
                cout << setw(W * jourSemaine) << jour;
             }
-            else {
+            else
+            {
                cout << setw(W) << jour;
             }
 
             //saut de ligne si c'est dimanche
             //seulement si c'est pas le dernier jour du mois
-            if (jourSemaine == 7) {
+            if (jourSemaine == 7)
+            {
                jourSemaine = 1;
 
-               if (jour != nbreJours) {
+               if (jour != nbreJours)
+               {
                   cout << endl;
                }
             }
-            else {
+            else
+            {
                ++jourSemaine;
             }
          }
@@ -161,14 +171,14 @@ int main() {
       //boucle de recommencement
       do {
 
-         fluxErreur = 0;
+         fluxErreur = false;
 
          cout << "Voulez-vous recommencer [O/N]? ";
          cin >> recommencer;
 
          if (recommencer != non and recommencer != oui or !cin.good())
          {
-            fluxErreur = 1;
+            fluxErreur = true;
             cout << "/!\\ recommencez" << endl;
             cin.clear();
          }
