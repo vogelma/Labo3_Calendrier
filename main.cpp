@@ -1,4 +1,4 @@
-/*-----------------------------------------------------------------------------------
+/*--------------------------------------------------------------------------------------------------------------
 Nom du fichier : main.cpp
 Auteur(s)      : Maëlle Vogel et Louis-Salim Ghosn
 Date creation  : 27.10.2020
@@ -7,7 +7,7 @@ Description    : Ce programme va demander une année à l'utilisateur puis va af
                  saisie sont traitées.
 Remarque(s)    : Le switch n'as pas de default car toutes les valeurs ont un résultat différent.
 Compilateur    : Mingw-w64 g++ 8.1.0
------------------------------------------------------------------------------------*/
+-------------------------------------------------------------------------------------------------------------*/
 #include <cstdlib>
 #include <iostream>
 #include <limits>
@@ -52,7 +52,7 @@ int main() {
 
          fluxErreur = false; // faux par défaut, flux intact
 
-         cout << "Entrez une valeur [" << ANNEEMIN << "-" << ANNEEMAX << "] : "; // intervalle d'années proposé
+         cout << "Entrez une valeur [" << ANNEEMIN << "-" << ANNEEMAX << "] : ";
          cin  >>  anneeUtilisateur;
 
          // vérifie si la saisie de l'utilisateur n'a pas cassé le flux ou n'a pas respecté l'intervalle d'années
@@ -60,7 +60,7 @@ int main() {
          {
             fluxErreur = true; // passe la variable à vrai
             cout << "/!\\ recommencez" << endl;
-            cin.clear(); // vide le cache d'erreur
+            cin.clear();      // vide le cache d'erreur
          }
 
          EMPTY_BUFFER
@@ -71,18 +71,20 @@ int main() {
       // saut de ligne avant affichage du calendrier
       cout << endl;
 
-      /* formule de Keith simplifiée pour trouver le jour de la semaine du premier janvier de n'importe quelle année
-         [https://fr.wikibooks.org/wiki/Curiosit%C3%A9s_math%C3%A9matiques/
-          Trouver_le_jour_de_la_semaine_avec_une_date_donn%C3%A9e]
-      */
-      int jourSemaine = (23/9 + 4 + (anneeUtilisateur+1) + (anneeUtilisateur-1)/4 - (anneeUtilisateur-1)/100
+      // formule de Keith simplifiée pour trouver le jour de la semaine du premier janvier de n'importe quelle année
+      // [https://fr.wikibooks.org/wiki/Curiosit%C3%A9s_math%C3%A9matiques/
+      // Trouver_le_jour_de_la_semaine_avec_une_date_donn%C3%A9e]
+      int calculKeith = (23/9 + 4 + (anneeUtilisateur+1) + (anneeUtilisateur-1)/4 - (anneeUtilisateur-1)/100
                         + (anneeUtilisateur-1)/400) % 7;
+
+      // corrige le problème du dimanche qui vaut 0 au lieu de 7
+      int jourSemaine = calculKeith == 0 ? 7 : calculKeith;
       int nbreJours;
 
-      // Affichage mois, de janvier à décembre avec 0++ <= 12 (se mettre d'accord sur l'écriture ici)
+      // Affichage mois, de janvier à décembre
       for (int moisCourant = JANVIER; moisCourant <= DECEMBRE; ++moisCourant)
       {
-         // Affiche mois courant grâce à un switch 1 - 12
+         // Affiche le nom du mois courant grâce à un switch 1 - 12
          switch (moisCourant) {
 
             case JANVIER  :
@@ -122,8 +124,7 @@ int main() {
                cout << "DECEMBRE " ; break;
          }
 
-         cout << anneeUtilisateur        << endl;
-         cout << "  L  M  M  J  V  S  D" << endl;
+         cout << anneeUtilisateur<< endl << "  L  M  M  J  V  S  D" << endl;
 
          // Test pour connaître le nombre de jour du mois courant
          if (moisCourant == FEVRIER)
@@ -154,7 +155,6 @@ int main() {
             // Alignement pour le premier de chaque mois
             if (jour == 1)
             {
-               // Remplit de jours vides jusqu'à jour 1
                cout << setw(W * jourSemaine) << jour;
             }
             else
@@ -162,10 +162,8 @@ int main() {
                cout << setw(W) << jour;
             }
 
-            /* Si c'est dimanche, recommence la semaine,
-               et saut de ligne seulement si ce n'est pas le dernier jour du mois
-               (évite un triple saut de ligne avec les 2 endl l.184)
-            */
+            // Si c'est dimanche, recommence la semaine,
+            // et saut de ligne seulement si ce n'est pas le dernier jour du mois
             if (jourSemaine == 7)
             {
                jourSemaine = 1;
@@ -203,7 +201,7 @@ int main() {
 
       } while(fluxErreur);
 
-   } while (recommencer == OUI); // On peut sortir de la boule l.193
+   } while (recommencer == OUI);
 
    return EXIT_SUCCESS;
 }
