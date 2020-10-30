@@ -77,8 +77,7 @@ int main() {
       int calculKeith = (23/9 + 4 + (anneeUtilisateur+1) + (anneeUtilisateur-1)/4 - (anneeUtilisateur-1)/100
                         + (anneeUtilisateur-1)/400) % 7;
 
-      // corrige le problème du dimanche qui vaut 0 au lieu de 7
-      int jourSemaine = calculKeith == 0 ? 7 : calculKeith;
+      int jourSemaine = calculKeith == 0 ? 7 : calculKeith; // corrige le problème du dimanche qui vaut 0 au lieu de 7
       int nbreJours;
 
       // Affichage mois, de janvier à décembre
@@ -129,16 +128,13 @@ int main() {
          // Test pour connaître le nombre de jour du mois courant
          if (moisCourant == FEVRIER)
          {
+            nbreJours = 28;
+
             // Cas année bissextile
             if (anneeUtilisateur % 400 == 0 or anneeUtilisateur % 4 == 0 and anneeUtilisateur % 100 != 0)
             {
                nbreJours = 29;
             }
-            else
-            {
-               nbreJours = 28;
-            }
-
          }
          else if (moisCourant == AVRIL || moisCourant == JUIN || moisCourant == SEPTEMBRE || moisCourant == NOVEMBRE)
          {
@@ -150,7 +146,7 @@ int main() {
          }
 
          // Affichage jours
-         for (int jour = 1; jour <= nbreJours; ++jour)
+         for (int jour = 1; jour <= nbreJours; ++jour, ++jourSemaine)
          {
             // Alignement pour le premier de chaque mois
             if (jour == 1)
@@ -163,20 +159,17 @@ int main() {
             }
 
             // Si c'est dimanche, recommence la semaine,
-            // et saut de ligne seulement si ce n'est pas le dernier jour du mois
+            // et saut de ligne seulement si ce n'est pas le dernier jour du mois (esthétique, évite triple saut de ligne)
             if (jourSemaine == 7)
             {
-               jourSemaine = 1;
+               jourSemaine = 0; // for ( ; ; ++jourSemaine) => commence à 1
 
                if (jour != nbreJours)
                {
                   cout << endl;
                }
             }
-            else
-            {
-               ++jourSemaine;
-            }
+
          }
 
          cout << endl << endl;
